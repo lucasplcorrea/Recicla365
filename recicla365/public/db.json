@@ -1,0 +1,39 @@
+{
+  "usuarios": [
+    {
+      "id": 1,
+      "nome": "Usuário 1",
+      "sexo": "Masculino",
+      "cpf": "123.456.789-00",
+      "dataNascimento": "1990-01-01",
+      "email": "usuario1@example.com",
+      "senha": "senha123",
+      "endereco": {
+        "logradouro": "Rua Exemplo",
+        "numero": "123",
+        "bairro": "Centro",
+        "cidade": "Exemplolândia",
+        "estado": "EX",
+        "cep": "12345-678"
+      }
+    },
+    {
+      "id": 2,
+      "nome": "Usuário 2",
+      "sexo": "Feminino",
+      "cpf": "987.654.321-00",
+      "dataNascimento": "1995-01-01",
+      "email": "usuario2@example.com",
+      "senha": "senha456",
+      "endereco": {
+        "logradouro": "Rua Teste",
+        "numero": "456",
+        "bairro": "Bairro Teste",
+        "cidade": "Testolândia",
+        "estado": "TS",
+        "cep": "54321-987"
+      }
+    }
+  ],
+  "locaisDeColeta": []
+}
