@@ -1,241 +1,257 @@
-import React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import React from "react";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Link from "@mui/material/Link";
+import Grid from "@mui/material/Unstable_Grid2";
+import Box from "@mui/material/Box";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { ptBR } from "@mui/x-date-pickers/locales";
+import "dayjs/locale/pt-br";
 
 function SignUp() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     console.log({
-      firstName: formData.get('firstName'),
-      lastName: formData.get('lastName'),
-      gender: formData.get('gender'),
-      cpf: formData.get('cpf'),
-      birthDate: formData.get('birthDate'),
-      cep: formData.get('cep'),
-      street: formData.get('street'),
-      number: formData.get('number'),
-      complement: formData.get('complement'),
-      district: formData.get('district'),
-      city: formData.get('city'),
-      state: formData.get('state'),
-      email: formData.get('email'),
-      password: formData.get('password'),
-      confirmPassword: formData.get('confirmPassword'),
-      allowExtraEmails: formData.get('allowExtraEmails'),
+      nome: formData.get("name"),
+      genero: formData.get("gender"),
+      cpf: formData.get("cpf"),
+      dataDeNascimento: formData.get("dataDeNascimento"),
+      cep: formData.get("cep"),
+      rua: formData.get("rua"),
+      numero: formData.get("numero"),
+      complemento: formData.get("complemento"),
+      bairro: formData.get("bairro"),
+      cidade: formData.get("cidade"),
+      estado: formData.get("estado"),
+      email: formData.get("email"),
+      senha: formData.get("senha"),
+      confirmaSenha: formData.get("confirmaSenha"),
     });
     // Aqui você pode adicionar a lógica para enviar os dados para o servidor
   };
 
   return (
     <ThemeProvider theme={createTheme()}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign up
-          </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="gender"
-                  label="Gender"
-                  name="gender"
-                  autoComplete="gender"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="cpf"
-                  label="CPF"
-                  name="cpf"
-                  autoComplete="cpf"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="birthDate"
-                  label="Birth Date"
-                  name="birthDate"
-                  autoComplete="birthDate"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="cep"
-                  label="CEP"
-                  name="cep"
-                  autoComplete="cep"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="street"
-                  label="Street"
-                  name="street"
-                  autoComplete="street"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="number"
-                  label="Number"
-                  name="number"
-                  autoComplete="number"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  id="complement"
-                  label="Complement"
-                  name="complement"
-                  autoComplete="complement"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="district"
-                  label="District"
-                  name="district"
-                  autoComplete="district"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="city"
-                  label="City"
-                  name="city"
-                  autoComplete="city"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="state"
-                  label="State"
-                  name="state"
-                  autoComplete="state"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="confirmPassword"
-                  label="Confirm Password"
-                  type="password"
-                  id="confirmPassword"
-                  autoComplete="new-password"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                  name="allowExtraEmails"
-                />
-              </Grid>
-            </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+      <LocalizationProvider
+        dateAdapter={AdapterDayjs}
+        adapterLocale="pt-br"
+        localeText={
+          ptBR.components.MuiLocalizationProvider.defaultProps.localeText
+        }
+      >
+        <Container component="main" maxWidth="md">
+          <CssBaseline />
+          <Box
+            sx={{
+              marginTop: 8,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Registro
+            </Typography>
+            <Box
+              component="form"
+              noValidate
+              onSubmit={handleSubmit}
+              sx={{ mt: 3 }}
             >
-              Sign Up
-            </Button>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link href="#" variant="body2">
-                  Already have an account? Sign in
-                </Link>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    autoComplete="name"
+                    name="nome"
+                    required
+                    fullWidth
+                    id="nome"
+                    label="Nome Completo"
+                    autoFocus
+                  />
+                </Grid>
+                <Grid item xs={12} lg={6}>
+                  <TextField
+                    required
+                    fullWidth
+                    id="cpf"
+                    label="CPF"
+                    name="cpf"
+                    autoComplete="cpf"
+                    inputProps={{ maxLength: 14 }} // Limita o tamanho do campo CPF
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, ""); // Remove caracteres não numéricos
+                      e.target.value = value
+                        .replace(/(\d{3})(\d)/, "$1.$2") // Adiciona ponto após o terceiro dígito
+                        .replace(/(\d{3})(\d)/, "$1.$2") // Adiciona ponto após o sexto dígito
+                        .replace(/(\d{3})(\d{1,2})$/, "$1-$2"); // Adiciona hífen após o nono dígito
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12} lg={6}>
+                  <DatePicker
+                    required
+                    fullWidth
+                    id="dataDeNascimento"
+                    label="Data de Nascimento"
+                    name="dataDeNascimento"
+                    autoComplete="dataDeNascimento"
+                    inputFormat="dd/MM/yyyy"
+                    renderInput={(params) => <TextField {...params} />}
+                    sx={{ width: '100%' }} 
+                  />
+                </Grid>
+                <Grid item xs={12} lg={6}>
+                  <TextField
+                    required
+                    fullWidth
+                    id="genero"
+                    label="Gênero"
+                    name="genero"
+                    autoComplete="genero"
+                  />
+                </Grid>
+                <Grid item xs={12} lg={6}>
+                  <TextField
+                    required
+                    fullWidth
+                    id="cep"
+                    label="CEP"
+                    name="cep"
+                    autoComplete="cep"
+                    inputProps={{ maxLength: 9 }} // Limita o tamanho do campo CEP
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, ""); // Remove caracteres não numéricos
+                      e.target.value = value.replace(/^(\d{5})(\d)/, "$1-$2"); // Adiciona hífen após o quinto dígito
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    id="rua"
+                    label="Rua"
+                    name="rua"
+                    autoComplete="rua"
+                  />
+                </Grid>
+                <Grid item xs={12} lg={4}>
+                  <TextField
+                    required
+                    fullWidth
+                    id="numero"
+                    label="Número"
+                    name="numero"
+                    autoComplete="numero"
+                  />
+                </Grid>
+                <Grid item xs={12} lg={4}>
+                  <TextField
+                    fullWidth
+                    id="complemento"
+                    label="Complemento"
+                    name="complemento"
+                    autoComplete="complemento"
+                  />
+                </Grid>
+                <Grid item xs={12} lg={4}>
+                  <TextField
+                    required
+                    fullWidth
+                    id="bairro"
+                    label="Bairro"
+                    name="bairro"
+                    autoComplete="bairro"
+                  />
+                </Grid>
+                <Grid item xs={12} lg={6}>
+                  <TextField
+                    required
+                    fullWidth
+                    id="cidade"
+                    label="Cidade"
+                    name="cidade"
+                    autoComplete="cidade"
+                  />
+                </Grid>
+                <Grid item xs={12} lg={6}>
+                  <TextField
+                    required
+                    fullWidth
+                    id="estado"
+                    label="Estado"
+                    name="estado"
+                    autoComplete="estado"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    id="email"
+                    label="Email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                  />
+                </Grid>
+                <Grid item xs={12} lg={6}>
+                  <TextField
+                    required
+                    fullWidth
+                    name="senha"
+                    label="Senha"
+                    type="password"
+                    id="senha"
+                    autoComplete="new-password"
+                  />
+                </Grid>
+                <Grid item xs={12} lg={6}>
+                  <TextField
+                    required
+                    fullWidth
+                    name="confirmaSenha"
+                    label="Confirme sua Senha"
+                    type="password"
+                    id="confirmaSenha"
+                    autoComplete="new-password"
+                  />
+                </Grid>
               </Grid>
-            </Grid>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Cadastre-se
+              </Button>
+              <Grid container justifyContent="flex-end">
+                <Grid item>
+                  <Link href="#" variant="body2">
+                    Já possui uma conta? Faça login
+                  </Link>
+                </Grid>
+              </Grid>
+            </Box>
           </Box>
-        </Box>
-      </Container>
+        </Container>
+      </LocalizationProvider>
     </ThemeProvider>
   );
 }
