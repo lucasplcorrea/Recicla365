@@ -6,7 +6,7 @@ import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
-import Grid from "@mui/material/Unstable_Grid2";
+import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
@@ -17,6 +17,11 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { ptBR } from "@mui/x-date-pickers/locales";
 import "dayjs/locale/pt-br";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import InputLabel from "@mui/material/InputLabel";
+import FormHelperText from "@mui/material/FormHelperText";
+import FormControl from "@mui/material/FormControl";
 
 function SignUp() {
   const [cepData, setCepData] = useState({
@@ -30,8 +35,8 @@ function SignUp() {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     console.log({
-      nome: formData.get("name"),
-      genero: formData.get("gender"),
+      nome: formData.get("nome"),
+      genero: formData.get("genero"),
       cpf: formData.get("cpf"),
       dataDeNascimento: formData.get("dataDeNascimento"),
       cep: formData.get("cep"),
@@ -46,6 +51,13 @@ function SignUp() {
       confirmaSenha: formData.get("confirmaSenha"),
     });
     // Aqui você pode adicionar a lógica para enviar os dados para o servidor
+  };
+
+  //checkGenero
+  const [genero, setGenero] = React.useState("");
+
+  const handleChange = (event) => {
+    setGenero(event.target.value);
   };
 
   //checkCEP
@@ -145,18 +157,24 @@ function SignUp() {
                     autoComplete="dataDeNascimento"
                     inputFormat="dd/MM/yyyy"
                     renderInput={(params) => <TextField {...params} />}
-                    sx={{ width: '100%' }} 
+                    sx={{ width: "100%" }}
                   />
                 </Grid>
                 <Grid item xs={12} lg={6}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="genero"
-                    label="Gênero"
-                    name="genero"
-                    autoComplete="genero"
-                  />
+                  <FormControl fullWidth>
+                    <InputLabel id="genero-label">Gênero</InputLabel>
+                    <Select
+                      labelId="genero-label"
+                      id="genero"
+                      value={genero}
+                      onChange={handleChange}
+                      label="Gênero"
+                    >
+                      <MenuItem value={"Masculino"}>Masculino</MenuItem>
+                      <MenuItem value={"Feminino"}>Feminino</MenuItem>
+                      <MenuItem value={"Outros"}>Outros</MenuItem>
+                    </Select>
+                  </FormControl>
                 </Grid>
                 <Grid item xs={12} lg={6}>
                   <TextField
@@ -183,7 +201,9 @@ function SignUp() {
                     name="rua"
                     autoComplete="rua"
                     value={cepData.rua} // Valor do estado local
-                    onChange={(event) => setCepData({ ...cepData, rua: event.target.value })} // Atualiza o estado local
+                    onChange={(event) =>
+                      setCepData({ ...cepData, rua: event.target.value })
+                    } // Atualiza o estado local
                   />
                 </Grid>
                 <Grid item xs={12} lg={4}>
@@ -214,7 +234,9 @@ function SignUp() {
                     name="bairro"
                     autoComplete="bairro"
                     value={cepData.bairro} // Valor do estado local
-                    onChange={(event) => setCepData({ ...cepData, bairro: event.target.value })} // Atualiza o estado local
+                    onChange={(event) =>
+                      setCepData({ ...cepData, bairro: event.target.value })
+                    } // Atualiza o estado local
                   />
                 </Grid>
                 <Grid item xs={12} lg={6}>
@@ -226,7 +248,9 @@ function SignUp() {
                     name="cidade"
                     autoComplete="cidade"
                     value={cepData.cidade} // Valor do estado local
-                    onChange={(event) => setCepData({ ...cepData, cidade: event.target.value })} // Atualiza o estado local
+                    onChange={(event) =>
+                      setCepData({ ...cepData, cidade: event.target.value })
+                    } // Atualiza o estado local
                   />
                 </Grid>
                 <Grid item xs={12} lg={6}>
@@ -238,7 +262,9 @@ function SignUp() {
                     name="estado"
                     autoComplete="estado"
                     value={cepData.estado} // Valor do estado local
-                    onChange={(event) => setCepData({ ...cepData, estado: event.target.value })} // Atualiza o estado local
+                    onChange={(event) =>
+                      setCepData({ ...cepData, estado: event.target.value })
+                    } // Atualiza o estado local
                   />
                 </Grid>
                 <Grid item xs={12}>
