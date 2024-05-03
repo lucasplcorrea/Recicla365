@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -19,6 +19,13 @@ import { ptBR } from "@mui/x-date-pickers/locales";
 import "dayjs/locale/pt-br";
 
 function SignUp() {
+  const [cepData, setCepData] = useState({
+    rua: "",
+    bairro: "",
+    cidade: "",
+    estado: "",
+  });
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -39,6 +46,32 @@ function SignUp() {
       confirmaSenha: formData.get("confirmaSenha"),
     });
     // Aqui você pode adicionar a lógica para enviar os dados para o servidor
+  };
+
+  //checkCEP
+
+  const checkCEP = (event) => {
+    const cep = event.target.value.replace(/\D/g, ""); // Remove caracteres não numéricos
+    if (cep.length !== 8) {
+      alert("CEP inválido");
+      return;
+    }
+
+    fetch(`https://viacep.com.br/ws/${cep}/json/`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.erro) {
+          alert("CEP não encontrado");
+          return;
+        }
+
+        setCepData({
+          rua: data.logradouro,
+          bairro: data.bairro,
+          cidade: data.localidade,
+          estado: data.uf,
+        });
+      });
   };
 
   return (
@@ -138,6 +171,7 @@ function SignUp() {
                       const value = e.target.value.replace(/\D/g, ""); // Remove caracteres não numéricos
                       e.target.value = value.replace(/^(\d{5})(\d)/, "$1-$2"); // Adiciona hífen após o quinto dígito
                     }}
+                    onBlur={checkCEP}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -148,6 +182,8 @@ function SignUp() {
                     label="Rua"
                     name="rua"
                     autoComplete="rua"
+                    value={cepData.rua} // Valor do estado local
+                    onChange={(event) => setCepData({ ...cepData, rua: event.target.value })} // Atualiza o estado local
                   />
                 </Grid>
                 <Grid item xs={12} lg={4}>
@@ -177,6 +213,8 @@ function SignUp() {
                     label="Bairro"
                     name="bairro"
                     autoComplete="bairro"
+                    value={cepData.bairro} // Valor do estado local
+                    onChange={(event) => setCepData({ ...cepData, bairro: event.target.value })} // Atualiza o estado local
                   />
                 </Grid>
                 <Grid item xs={12} lg={6}>
@@ -187,6 +225,8 @@ function SignUp() {
                     label="Cidade"
                     name="cidade"
                     autoComplete="cidade"
+                    value={cepData.cidade} // Valor do estado local
+                    onChange={(event) => setCepData({ ...cepData, cidade: event.target.value })} // Atualiza o estado local
                   />
                 </Grid>
                 <Grid item xs={12} lg={6}>
@@ -197,6 +237,8 @@ function SignUp() {
                     label="Estado"
                     name="estado"
                     autoComplete="estado"
+                    value={cepData.estado} // Valor do estado local
+                    onChange={(event) => setCepData({ ...cepData, estado: event.target.value })} // Atualiza o estado local
                   />
                 </Grid>
                 <Grid item xs={12}>
