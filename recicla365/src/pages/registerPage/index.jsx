@@ -3,8 +3,6 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -31,36 +29,135 @@ function SignUp() {
     estado: "",
   });
 
-  const handleSubmit = (event) => {
+  const [formErrors, setFormErrors] = useState({});
+  const [genero, setGenero] = useState("");
+  const [cpfError, setCpfError] = useState(false);
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    console.log("Formulário enviado...");
+
     const formData = new FormData(event.currentTarget);
-    console.log({
-      nome: formData.get("nome"),
-      genero: formData.get("genero"),
-      cpf: formData.get("cpf"),
-      dataDeNascimento: formData.get("dataDeNascimento"),
-      cep: formData.get("cep"),
-      rua: formData.get("rua"),
-      numero: formData.get("numero"),
-      complemento: formData.get("complemento"),
-      bairro: formData.get("bairro"),
-      cidade: formData.get("cidade"),
-      estado: formData.get("estado"),
-      email: formData.get("email"),
-      senha: formData.get("senha"),
-      confirmaSenha: formData.get("confirmaSenha"),
+
+    // Validar email
+    const email = formData.get("email");
+    if (!validateEmail(email)) {
+      setFormErrors((prevErrors) => ({
+        ...prevErrors,
+        email: "Por favor, insira um email válido",
+      }));
+      return;
+    }
+
+    // Validar senha
+    const senha = formData.get("senha");
+    if (!validatePassword(senha)) {
+      setFormErrors((prevErrors) => ({
+        ...prevErrors,
+        senha:
+          "A senha deve ter pelo menos 8 caracteres, 1 letra maiúscula e 1 número",
+      }));
+      return;
+    }
+
+    console.log("Dados do formulário:", formData);
+
+    // Verifica se todos os campos obrigatórios estão preenchidos
+    const requiredFields = [
+      "nome",
+      "cpf",
+      "dataDeNascimento",
+      "genero",
+      "cep",
+      "rua",
+      "numero",
+      "bairro",
+      "cidade",
+      "estado",
+      "email",
+      "senha",
+      "confirmaSenha",
+    ];
+    const errors = {};
+    let hasErrors = false;
+
+    requiredFields.forEach((fieldName) => {
+      if (!formData.get(fieldName) && fieldName !== "genero") {
+        errors[fieldName] = "Campo obrigatório";
+        hasErrors = true;
+      }
     });
-    // Aqui você pode adicionar a lógica para enviar os dados para o servidor
+
+    if (hasErrors) {
+      console.log("Campos obrigatórios não preenchidos:", errors);
+      setFormErrors(errors);
+      return;
+    }
+
+    // Verifica se já existe um usuário com o mesmo CPF
+    const cpf = formData.get("cpf");
+    console.log("Verificando se o CPF já existe:", cpf);
+    const cpfExists = await checkCpfExists(cpf);
+    console.log("CPF existe?", cpfExists);
+
+    if (cpfExists) {
+      setCpfError(true);
+      console.log("CPF já existe.");
+      return;
+    }
+
+    // Enviar dados para o servidor para cadastro
+    try {
+      const response = await fetch("http://localhost:5000/usuarios", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nome: formData.get("nome"),
+          cpf: formData.get("cpf"),
+          dataDeNascimento: formData.get("dataDeNascimento"),
+          genero: formData.get("genero"),
+          cep: formData.get("cep"),
+          rua: formData.get("rua"),
+          numero: formData.get("numero"),
+          complemento: formData.get("complemento"),
+          bairro: formData.get("bairro"),
+          cidade: formData.get("cidade"),
+          estado: formData.get("estado"),
+          email: formData.get("email"),
+          senha: formData.get("senha"),
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("Erro ao cadastrar usuário");
+      }
+      console.log("Usuário cadastrado com sucesso!");
+    } catch (error) {
+      console.error("Erro ao cadastrar usuário:", error);
+    }
+
+    // Se tudo estiver correto, envia os dados para o servidor para cadastro
+    console.log("Formulário válido. Enviando dados para o servidor...");
   };
 
-  //checkGenero
-  const [genero, setGenero] = React.useState("");
+  const checkCpfExists = async (cpf) => {
+    try {
+      const response = await fetch(`http://localhost:5000/usuarios?cpf=${cpf}`);
+      if (!response.ok) {
+        throw new Error("Erro ao buscar usuário");
+      }
+      const data = await response.json();
+      return data.length > 0; // Retorna true se o CPF já existe, false caso contrário
+    } catch (error) {
+      console.error("Erro ao verificar CPF:", error);
+      return true; // Retorna true para indicar um erro na verificação
+    }
+  };
 
   const handleChange = (event) => {
     setGenero(event.target.value);
   };
-
-  //checkCEP
 
   const checkCEP = (event) => {
     const cep = event.target.value.replace(/\D/g, ""); // Remove caracteres não numéricos
@@ -127,6 +224,10 @@ function SignUp() {
                     id="nome"
                     label="Nome Completo"
                     autoFocus
+                    error={formErrors.nome && true}
+                    helperText={
+                      formErrors.nome && "Por favor, preencha seu nome"
+                    }
                   />
                 </Grid>
                 <Grid item xs={12} lg={6}>
@@ -145,6 +246,10 @@ function SignUp() {
                         .replace(/(\d{3})(\d)/, "$1.$2") // Adiciona ponto após o sexto dígito
                         .replace(/(\d{3})(\d{1,2})$/, "$1-$2"); // Adiciona hífen após o nono dígito
                     }}
+                    error={cpfError}
+                    helperText={
+                      cpfError && "Já existe um usuário cadastrado com esse CPF"
+                    }
                   />
                 </Grid>
                 <Grid item xs={12} lg={6}>
@@ -161,7 +266,7 @@ function SignUp() {
                   />
                 </Grid>
                 <Grid item xs={12} lg={6}>
-                  <FormControl fullWidth>
+                  <FormControl fullWidth error={formErrors.genero && true}>
                     <InputLabel id="genero-label">Gênero</InputLabel>
                     <Select
                       labelId="genero-label"
@@ -174,6 +279,9 @@ function SignUp() {
                       <MenuItem value={"Feminino"}>Feminino</MenuItem>
                       <MenuItem value={"Outros"}>Outros</MenuItem>
                     </Select>
+                    {formErrors.genero && (
+                      <FormHelperText>{formErrors.genero}</FormHelperText>
+                    )}
                   </FormControl>
                 </Grid>
                 <Grid item xs={12} lg={6}>
@@ -276,6 +384,10 @@ function SignUp() {
                     name="email"
                     type="email"
                     autoComplete="email"
+                    error={formErrors.email && true}
+                    helperText={
+                      formErrors.email && "Por favor, insira um email válido"
+                    }
                   />
                 </Grid>
                 <Grid item xs={12} lg={6}>
@@ -287,6 +399,11 @@ function SignUp() {
                     type="password"
                     id="senha"
                     autoComplete="new-password"
+                    error={formErrors.senha && true}
+                    helperText={
+                      formErrors.senha &&
+                      "A senha deve ter pelo menos 8 caracteres, 1 letra maiúscula e 1 número"
+                    }
                   />
                 </Grid>
                 <Grid item xs={12} lg={6}>
@@ -298,6 +415,10 @@ function SignUp() {
                     type="password"
                     id="confirmaSenha"
                     autoComplete="new-password"
+                    error={formErrors.confirmaSenha && true}
+                    helperText={
+                      formErrors.confirmaSenha && "A senha não coincide"
+                    }
                   />
                 </Grid>
               </Grid>
@@ -322,6 +443,16 @@ function SignUp() {
       </LocalizationProvider>
     </ThemeProvider>
   );
+}
+
+function validateEmail(email) {
+  // Implemente sua lógica de validação de email aqui
+  return /\S+@\S+\.\S+/.test(email);
+}
+
+function validatePassword(password) {
+  // Implemente sua lógica de validação de senha aqui
+  return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/.test(password);
 }
 
 export default SignUp;

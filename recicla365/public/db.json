@@ -33,6 +33,22 @@
         "estado": "TS",
         "cep": "54321-987"
       }
+    },
+    {
+      "nome": "Joao da Silva",
+      "cpf": "101.808.749-42",
+      "dataDeNascimento": "13/10/1997",
+      "genero": null,
+      "cep": "88070-820",
+      "rua": "Rua Olavo Bilac",
+      "numero": "114",
+      "complemento": "871",
+      "bairro": "Canto",
+      "cidade": "Florianópolis",
+      "estado": "SC",
+      "email": "email@teste.com",
+      "senha": "122712Oi",
+      "id": 3
     }
   ],
   "locaisDeColeta": []
