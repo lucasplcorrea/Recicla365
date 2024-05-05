@@ -35,7 +35,7 @@ function SignUp() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("Formulário enviado...");
+    console.log("Realizando validações...");
 
     const formData = new FormData(event.currentTarget);
 
@@ -59,7 +59,7 @@ function SignUp() {
       }));
       return;
     }
-
+    console.log("Formulário válido.")
     console.log("Dados do formulário:", formData);
 
     // Verifica se todos os campos obrigatórios estão preenchidos
@@ -98,11 +98,12 @@ function SignUp() {
     const cpf = formData.get("cpf");
     console.log("Verificando se o CPF já existe:", cpf);
     const cpfExists = await checkCpfExists(cpf);
-    console.log("CPF existe?", cpfExists);
+    console.log(cpfExists);
 
     if (cpfExists) {
       setCpfError(true);
-      console.log("CPF já existe.");
+      console.log("Já existe um cadastro com esse CPF.");
+      window.alert("Já existe um cadastro com esse CPF.")
       return;
     }
 
@@ -117,7 +118,7 @@ function SignUp() {
           nome: formData.get("nome"),
           cpf: formData.get("cpf"),
           dataDeNascimento: formData.get("dataDeNascimento"),
-          genero: formData.get("genero"),
+          genero: genero || "",
           cep: formData.get("cep"),
           rua: formData.get("rua"),
           numero: formData.get("numero"),
@@ -133,6 +134,7 @@ function SignUp() {
         throw new Error("Erro ao cadastrar usuário");
       }
       console.log("Usuário cadastrado com sucesso!");
+      window.alert("Usuário cadastrado com sucesso!")
     } catch (error) {
       console.error("Erro ao cadastrar usuário:", error);
     }
