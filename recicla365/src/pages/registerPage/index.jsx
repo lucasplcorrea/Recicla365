@@ -32,10 +32,13 @@ function SignUp() {
 
   // State para armazenar os erros do formulário
   const [formErrors, setFormErrors] = useState({});
+
   // State para armazenar o gênero selecionado
   const [genero, setGenero] = useState("");
+
   // State para controlar se há erro no CPF
   const [cpfError, setCpfError] = useState(false);
+
   // Função para lidar com o envio do formulário
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -84,17 +87,18 @@ function SignUp() {
     let hasErrors = false;
 
     requiredFields.forEach((fieldName) => {
-      if (!formData.get(fieldName) && fieldName !== "genero") {
+      if (!formData.get(fieldName)) {
         errors[fieldName] = "Campo obrigatório";
         hasErrors = true;
       }
     });
-
+  
     if (hasErrors) {
       console.log("Campos obrigatórios não preenchidos:", errors);
       setFormErrors(errors);
       return;
     }
+
     //Validação do CPF para cadastro
     const cpf = formData.get("cpf");
     console.log("Verificando se o CPF já existe:", cpf);
@@ -149,26 +153,22 @@ function SignUp() {
         throw new Error("Erro ao buscar usuário");
       }
       const data = await response.json();
-      return data.length > 0;  
+      return data.length > 0;
     } catch (error) {
       console.error("Erro ao verificar CPF:", error);
-      return true; 
+      return true;
     }
   };
 
-  //BUG ENCONTRADO - ESSE TRECHO DEVERIA REMOVER OS ERROS APÓS O USUÁRIO CORRIGIR AS INFORMAÇÕES 
-  //NOS CAMPOS, MAS POR ALGUM MOTIVO ISSO NÃO OCORRE
   const handleChange = (event) => {
     const fieldName = event.target.name;
     const fieldValue = event.target.value;
-    
-    
+
     setFormErrors((prevErrors) => ({
       ...prevErrors,
-      [fieldName]: "", 
+      [fieldName]: "",
     }));
-  
-    
+
     if (fieldName === "genero") {
       setGenero(fieldValue);
     } else if (fieldName === "cpf") {
@@ -182,19 +182,17 @@ function SignUp() {
       });
     }
   };
-  
+
   const handleBlur = (fieldName) => {
     setFormErrors((prevErrors) => ({
       ...prevErrors,
-      [fieldName]: "", 
+      [fieldName]: "",
     }));
   };
 
-  //FIM DO TRECHO COM BUG
-
   //VALIDA CEP - ViaCEP
   const checkCEP = (event) => {
-    const cep = event.target.value.replace(/\D/g, ""); 
+    const cep = event.target.value.replace(/\D/g, "");
     if (cep.length !== 8) {
       alert("CEP inválido");
       return;
@@ -216,7 +214,6 @@ function SignUp() {
         });
       });
   };
-
 
   //BLOCOS DO FORMULÁRIO
   return (
@@ -264,6 +261,8 @@ function SignUp() {
                     helperText={
                       formErrors.nome && "Por favor, preencha seu nome"
                     }
+                    onChange={handleChange}
+                    onBlur={handleBlur}
                   />
                 </Grid>
                 <Grid item xs={12} lg={6}>
@@ -274,19 +273,22 @@ function SignUp() {
                     label="CPF"
                     name="cpf"
                     autoComplete="cpf"
-                    inputProps={{ maxLength: 14 }}
+                    inputProps={{ minLength: 14, maxLength: 14 }}
                     onChange={(e) => {
-                      const value = e.target.value.replace(/\D/g, ""); 
+                      const value = e.target.value.replace(/\D/g, "");
                       e.target.value = value
-                        .replace(/(\d{3})(\d)/, "$1.$2") 
-                        .replace(/(\d{3})(\d)/, "$1.$2") 
-                        .replace(/(\d{3})(\d{1,2})$/, "$1-$2"); 
+                        .replace(/(\d{3})(\d)/, "$1.$2")
+                        .replace(/(\d{3})(\d)/, "$1.$2")
+                        .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+                      handleChange(e); // Adicione esta linha para validar o campo CPF
                     }}
-                    error={cpfError}
+                    error={formErrors.cpf && true}
                     helperText={
-                      cpfError && "Já existe um usuário cadastrado com esse CPF"
+                      (cpfError &&
+                        "Já existe um usuário cadastrado com esse CPF") ||
+                      (formErrors.cpf && "Por favor, insira um CPF válido")
                     }
-                    onBlur={() => setFormErrors((prevErrors) => ({cpf: "" }))}
+                    onBlur={handleBlur}
                   />
                 </Grid>
                 <Grid item xs={12} lg={6}>
@@ -304,14 +306,15 @@ function SignUp() {
                 </Grid>
                 <Grid item xs={12} lg={6}>
                   <FormControl fullWidth error={formErrors.genero && true}>
-                    <InputLabel id="genero-label">Gênero</InputLabel>
+                    <InputLabel id="genero-label">Gênero *</InputLabel>
                     <Select
                       labelId="genero-label"
                       id="genero"
                       value={genero}
                       onChange={(event) => setGenero(event.target.value)}
-                      label="Gênero"
+                      label="Gênero *"
                       name="genero"
+                      required
                     >
                       <MenuItem value={"Masculino"}>Masculino</MenuItem>
                       <MenuItem value={"Feminino"}>Feminino</MenuItem>
@@ -330,10 +333,10 @@ function SignUp() {
                     label="CEP"
                     name="cep"
                     autoComplete="cep"
-                    inputProps={{ maxLength: 9 }} 
+                    inputProps={{ maxLength: 9 }}
                     onChange={(e) => {
-                      const value = e.target.value.replace(/\D/g, ""); 
-                      e.target.value = value.replace(/^(\d{5})(\d)/, "$1-$2"); 
+                      const value = e.target.value.replace(/\D/g, "");
+                      e.target.value = value.replace(/^(\d{5})(\d)/, "$1-$2");
                     }}
                     onBlur={checkCEP}
                   />
@@ -346,10 +349,10 @@ function SignUp() {
                     label="Rua"
                     name="rua"
                     autoComplete="rua"
-                    value={cepData.rua} 
+                    value={cepData.rua}
                     onChange={(event) =>
                       setCepData({ ...cepData, rua: event.target.value })
-                    } 
+                    }
                   />
                 </Grid>
                 <Grid item xs={12} lg={4}>
@@ -379,10 +382,10 @@ function SignUp() {
                     label="Bairro"
                     name="bairro"
                     autoComplete="bairro"
-                    value={cepData.bairro} 
+                    value={cepData.bairro}
                     onChange={(event) =>
                       setCepData({ ...cepData, bairro: event.target.value })
-                    } 
+                    }
                   />
                 </Grid>
                 <Grid item xs={12} lg={6}>
@@ -393,10 +396,10 @@ function SignUp() {
                     label="Cidade"
                     name="cidade"
                     autoComplete="cidade"
-                    value={cepData.cidade} 
+                    value={cepData.cidade}
                     onChange={(event) =>
                       setCepData({ ...cepData, cidade: event.target.value })
-                    } 
+                    }
                   />
                 </Grid>
                 <Grid item xs={12} lg={6}>
@@ -407,10 +410,10 @@ function SignUp() {
                     label="Estado"
                     name="estado"
                     autoComplete="estado"
-                    value={cepData.estado} 
+                    value={cepData.estado}
                     onChange={(event) =>
                       setCepData({ ...cepData, estado: event.target.value })
-                    } 
+                    }
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -424,8 +427,12 @@ function SignUp() {
                     autoComplete="email"
                     error={formErrors.email && true}
                     helperText={
-                      formErrors.email && "Por favor, insira um email válido"
+                      (formErrors.email &&
+                        "Por favor, insira um email válido") ||
+                      " "
                     }
+                    onChange={handleChange}
+                    onBlur={handleBlur}
                   />
                 </Grid>
                 <Grid item xs={12} lg={6}>
@@ -439,9 +446,12 @@ function SignUp() {
                     autoComplete="new-password"
                     error={formErrors.senha && true}
                     helperText={
-                      formErrors.senha &&
-                      "A senha deve ter pelo menos 8 caracteres, 1 letra maiúscula e 1 número"
+                      (formErrors.senha &&
+                        "A senha deve ter pelo menos 8 caracteres, 1 letra maiúscula e 1 número") ||
+                      " "
                     }
+                    onChange={handleChange}
+                    onBlur={handleBlur}
                   />
                 </Grid>
                 <Grid item xs={12} lg={6}>
@@ -455,8 +465,11 @@ function SignUp() {
                     autoComplete="new-password"
                     error={formErrors.confirmaSenha && true}
                     helperText={
-                      formErrors.confirmaSenha && "A senha não coincide"
+                      (formErrors.confirmaSenha && "A senha não coincide") ||
+                      " "
                     }
+                    onChange={handleChange}
+                    onBlur={handleBlur}
                   />
                 </Grid>
               </Grid>
