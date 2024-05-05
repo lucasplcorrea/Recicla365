@@ -22,6 +22,7 @@ import FormHelperText from "@mui/material/FormHelperText";
 import FormControl from "@mui/material/FormControl";
 
 function SignUp() {
+  // State para armazenar os dados do CEP
   const [cepData, setCepData] = useState({
     rua: "",
     bairro: "",
@@ -29,17 +30,19 @@ function SignUp() {
     estado: "",
   });
 
+  // State para armazenar os erros do formulário
   const [formErrors, setFormErrors] = useState({});
+  // State para armazenar o gênero selecionado
   const [genero, setGenero] = useState("");
+  // State para controlar se há erro no CPF
   const [cpfError, setCpfError] = useState(false);
-
+  // Função para lidar com o envio do formulário
   const handleSubmit = async (event) => {
     event.preventDefault();
     console.log("Realizando validações...");
 
     const formData = new FormData(event.currentTarget);
-
-    // Validar email
+    //Validação do email
     const email = formData.get("email");
     if (!validateEmail(email)) {
       setFormErrors((prevErrors) => ({
@@ -48,8 +51,7 @@ function SignUp() {
       }));
       return;
     }
-
-    // Validar senha
+    //Validação da senha
     const senha = formData.get("senha");
     if (!validatePassword(senha)) {
       setFormErrors((prevErrors) => ({
@@ -59,10 +61,10 @@ function SignUp() {
       }));
       return;
     }
-    console.log("Formulário válido.")
+    console.log("Formulário válido.");
     console.log("Dados do formulário:", formData);
 
-    // Verifica se todos os campos obrigatórios estão preenchidos
+    // Validação dos campos obrigatórios
     const requiredFields = [
       "nome",
       "cpf",
@@ -93,8 +95,7 @@ function SignUp() {
       setFormErrors(errors);
       return;
     }
-
-    // Verifica se já existe um usuário com o mesmo CPF
+    //Validação do CPF para cadastro
     const cpf = formData.get("cpf");
     console.log("Verificando se o CPF já existe:", cpf);
     const cpfExists = await checkCpfExists(cpf);
@@ -103,11 +104,10 @@ function SignUp() {
     if (cpfExists) {
       setCpfError(true);
       console.log("Já existe um cadastro com esse CPF.");
-      window.alert("Já existe um cadastro com esse CPF.")
+      window.alert("Já existe um cadastro com esse CPF.");
       return;
     }
-
-    // Enviar dados para o servidor para cadastro
+    //Envio dos dados para o servidor
     try {
       const response = await fetch("http://localhost:5000/usuarios", {
         method: "POST",
@@ -134,12 +134,11 @@ function SignUp() {
         throw new Error("Erro ao cadastrar usuário");
       }
       console.log("Usuário cadastrado com sucesso!");
-      window.alert("Usuário cadastrado com sucesso!")
+      window.alert("Usuário cadastrado com sucesso!");
     } catch (error) {
       console.error("Erro ao cadastrar usuário:", error);
     }
 
-    // Se tudo estiver correto, envia os dados para o servidor para cadastro
     console.log("Formulário válido. Enviando dados para o servidor...");
   };
 
@@ -150,19 +149,52 @@ function SignUp() {
         throw new Error("Erro ao buscar usuário");
       }
       const data = await response.json();
-      return data.length > 0; // Retorna true se o CPF já existe, false caso contrário
+      return data.length > 0;  
     } catch (error) {
       console.error("Erro ao verificar CPF:", error);
-      return true; // Retorna true para indicar um erro na verificação
+      return true; 
     }
   };
 
+  //BUG ENCONTRADO - ESSE TRECHO DEVERIA REMOVER OS ERROS APÓS O USUÁRIO CORRIGIR AS INFORMAÇÕES 
+  //NOS CAMPOS, MAS POR ALGUM MOTIVO ISSO NÃO OCORRE
   const handleChange = (event) => {
-    setGenero(event.target.value);
+    const fieldName = event.target.name;
+    const fieldValue = event.target.value;
+    
+    
+    setFormErrors((prevErrors) => ({
+      ...prevErrors,
+      [fieldName]: "", 
+    }));
+  
+    
+    if (fieldName === "genero") {
+      setGenero(fieldValue);
+    } else if (fieldName === "cpf") {
+      setCpfError(false);
+    } else if (fieldName === "cep") {
+      setCepData({
+        rua: "",
+        bairro: "",
+        cidade: "",
+        estado: "",
+      });
+    }
+  };
+  
+  const handleBlur = (fieldName) => {
+    setFormErrors((prevErrors) => ({
+      ...prevErrors,
+      [fieldName]: "", 
+    }));
   };
 
+  //FIM DO TRECHO COM BUG
+
+  //VALIDA CEP - ViaCEP
   const checkCEP = (event) => {
-    const cep = event.target.value.replace(/\D/g, ""); // Remove caracteres não numéricos
+    const cep = event.target.value.replace(/\D/g, ""); 
     if (cep.length !== 8) {
       alert("CEP inválido");
       return;
@@ -185,6 +217,8 @@ function SignUp() {
       });
   };
 
+
+  //BLOCOS DO FORMULÁRIO
   return (
     <ThemeProvider theme={createTheme()}>
       <LocalizationProvider
@@ -240,18 +274,19 @@ function SignUp() {
                     label="CPF"
                     name="cpf"
                     autoComplete="cpf"
-                    inputProps={{ maxLength: 14 }} // Limita o tamanho do campo CPF
+                    inputProps={{ maxLength: 14 }}
                     onChange={(e) => {
-                      const value = e.target.value.replace(/\D/g, ""); // Remove caracteres não numéricos
+                      const value = e.target.value.replace(/\D/g, ""); 
                       e.target.value = value
-                        .replace(/(\d{3})(\d)/, "$1.$2") // Adiciona ponto após o terceiro dígito
-                        .replace(/(\d{3})(\d)/, "$1.$2") // Adiciona ponto após o sexto dígito
-                        .replace(/(\d{3})(\d{1,2})$/, "$1-$2"); // Adiciona hífen após o nono dígito
+                        .replace(/(\d{3})(\d)/, "$1.$2") 
+                        .replace(/(\d{3})(\d)/, "$1.$2") 
+                        .replace(/(\d{3})(\d{1,2})$/, "$1-$2"); 
                     }}
                     error={cpfError}
                     helperText={
                       cpfError && "Já existe um usuário cadastrado com esse CPF"
                     }
+                    onBlur={() => setFormErrors((prevErrors) => ({cpf: "" }))}
                   />
                 </Grid>
                 <Grid item xs={12} lg={6}>
@@ -274,8 +309,9 @@ function SignUp() {
                       labelId="genero-label"
                       id="genero"
                       value={genero}
-                      onChange={handleChange}
+                      onChange={(event) => setGenero(event.target.value)}
                       label="Gênero"
+                      name="genero"
                     >
                       <MenuItem value={"Masculino"}>Masculino</MenuItem>
                       <MenuItem value={"Feminino"}>Feminino</MenuItem>
@@ -294,10 +330,10 @@ function SignUp() {
                     label="CEP"
                     name="cep"
                     autoComplete="cep"
-                    inputProps={{ maxLength: 9 }} // Limita o tamanho do campo CEP
+                    inputProps={{ maxLength: 9 }} 
                     onChange={(e) => {
-                      const value = e.target.value.replace(/\D/g, ""); // Remove caracteres não numéricos
-                      e.target.value = value.replace(/^(\d{5})(\d)/, "$1-$2"); // Adiciona hífen após o quinto dígito
+                      const value = e.target.value.replace(/\D/g, ""); 
+                      e.target.value = value.replace(/^(\d{5})(\d)/, "$1-$2"); 
                     }}
                     onBlur={checkCEP}
                   />
@@ -310,10 +346,10 @@ function SignUp() {
                     label="Rua"
                     name="rua"
                     autoComplete="rua"
-                    value={cepData.rua} // Valor do estado local
+                    value={cepData.rua} 
                     onChange={(event) =>
                       setCepData({ ...cepData, rua: event.target.value })
-                    } // Atualiza o estado local
+                    } 
                   />
                 </Grid>
                 <Grid item xs={12} lg={4}>
@@ -343,10 +379,10 @@ function SignUp() {
                     label="Bairro"
                     name="bairro"
                     autoComplete="bairro"
-                    value={cepData.bairro} // Valor do estado local
+                    value={cepData.bairro} 
                     onChange={(event) =>
                       setCepData({ ...cepData, bairro: event.target.value })
-                    } // Atualiza o estado local
+                    } 
                   />
                 </Grid>
                 <Grid item xs={12} lg={6}>
@@ -357,10 +393,10 @@ function SignUp() {
                     label="Cidade"
                     name="cidade"
                     autoComplete="cidade"
-                    value={cepData.cidade} // Valor do estado local
+                    value={cepData.cidade} 
                     onChange={(event) =>
                       setCepData({ ...cepData, cidade: event.target.value })
-                    } // Atualiza o estado local
+                    } 
                   />
                 </Grid>
                 <Grid item xs={12} lg={6}>
@@ -371,10 +407,10 @@ function SignUp() {
                     label="Estado"
                     name="estado"
                     autoComplete="estado"
-                    value={cepData.estado} // Valor do estado local
+                    value={cepData.estado} 
                     onChange={(event) =>
                       setCepData({ ...cepData, estado: event.target.value })
-                    } // Atualiza o estado local
+                    } 
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -447,13 +483,13 @@ function SignUp() {
   );
 }
 
+//Regex para email
 function validateEmail(email) {
-  // Implemente sua lógica de validação de email aqui
   return /\S+@\S+\.\S+/.test(email);
 }
 
+//Regex para senha
 function validatePassword(password) {
-  // Implemente sua lógica de validação de senha aqui
   return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/.test(password);
 }
 
