@@ -1,32 +1,66 @@
-import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import * as React from "react";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 const defaultTheme = createTheme();
 
 const CadastroColetas = () => {
   const [cepData, setCepData] = React.useState({
-    rua: '',
-    bairro: '',
-    cidade: '',
-    estado: '',
-    latitude: '',
-    longitude: '',
+    rua: "",
+    bairro: "",
+    cidade: "",
+    estado: "",
+    latitude: "",
+    longitude: "",
   });
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+  
+    // Verificar se pelo menos um tipo de resíduo foi selecionado
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    const tiposResiduos = [
+      data.get('vidro'),
+      data.get('metal'),
+      data.get('papel'),
+      data.get('plastico'),
+      data.get('organico'),
+      data.get('baterias'),
+      data.get('polyestireno'),
+    ];
+  
+    if (tiposResiduos.every((residuo) => residuo !== 'on')) {
+      alert('Selecione pelo menos um tipo de resíduo.');
+      return;
+    }
+  
+    // Verificar se os campos obrigatórios estão preenchidos
+    const inputs = form.querySelectorAll('input, select, textarea');
+    let isValid = true;
+  
+    inputs.forEach((input) => {
+      if (input.required && !input.value.trim()) {
+        isValid = false;
+        input.reportValidity();
+      }
+    });
+  
+    if (!isValid) {
+      return; // Não prosseguir com o envio do formulário se algum campo obrigatório estiver vazio
+    }
+  
+    // Se todos os campos obrigatórios e pelo menos um tipo de resíduo estiverem preenchidos, prosseguir com o envio
     console.log({
       nome: data.get('nome'),
       descricao: data.get('descricao'),
@@ -50,12 +84,16 @@ const CadastroColetas = () => {
       },
     });
   };
-
+  
   // Função para obter latitude e longitude a partir do endereço
   const getLatLongFromAddress = async () => {
     try {
       const endereco = `${cepData.rua}, ${cepData.bairro}, ${cepData.cidade}, ${cepData.estado}`;
-      const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(endereco)}&format=jsonv2&limit=1&addressdetails=1`);
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
+          endereco
+        )}&format=jsonv2&limit=1&addressdetails=1`
+      );
       const result = await response.json();
 
       if (result && result.length > 0) {
@@ -65,54 +103,53 @@ const CadastroColetas = () => {
           longitude: result[0].lon,
         });
       } else {
-        console.error('Endereço não encontrado.');
+        console.error("Endereço não encontrado.");
       }
     } catch (error) {
-      console.error('Erro ao buscar latitude e longitude:', error);
+      console.error("Erro ao buscar latitude e longitude:", error);
     }
   };
 
   // Função para lidar com a mudança do CEP
   const handleCEPChange = (event) => {
-  const cep = event.target.value.replace(/\D/g, "");
-  if (cep.length === 8) {
-    fetch(`https://viacep.com.br/ws/${cep}/json/`)
-      .then((response) => response.json())
-      .then((data) => {
-        if (!data.erro) {
-          const address = `${data.logradouro}, ${data.bairro}, ${data.localidade}, ${data.uf}`;
-          const encodedAddress = encodeURIComponent(address);
-          const url = `https://nominatim.openstreetmap.org/search?q=${encodedAddress}+&format=jsonv2&limit=1&addressdetails=1`;
-          fetch(url)
-            .then((response) => response.json())
-            .then((addressData) => {
-              if (addressData && addressData.length > 0) {
-                setCepData({
-                  ...cepData,
-                  rua: data.logradouro,
-                  bairro: data.bairro,
-                  cidade: data.localidade,
-                  estado: data.uf,
-                  latitude: addressData[0].lat,
-                  longitude: addressData[0].lon,
-                });
-              } else {
-                console.error('Endereço não encontrado.');
-              }
-            })
-            .catch((error) => {
-              console.error('Erro ao buscar latitude e longitude:', error);
-            });
-        } else {
-          console.error('CEP não encontrado.');
-        }
-      })
-      .catch((error) => {
-        console.error('Erro ao buscar dados do endereço:', error);
-      });
-  }
-};
-
+    const cep = event.target.value.replace(/\D/g, "");
+    if (cep.length === 8) {
+      fetch(`https://viacep.com.br/ws/${cep}/json/`)
+        .then((response) => response.json())
+        .then((data) => {
+          if (!data.erro) {
+            const address = `${data.logradouro}, ${data.bairro}, ${data.localidade}, ${data.uf}`;
+            const encodedAddress = encodeURIComponent(address);
+            const url = `https://nominatim.openstreetmap.org/search?q=${encodedAddress}+&format=jsonv2&limit=1&addressdetails=1`;
+            fetch(url)
+              .then((response) => response.json())
+              .then((addressData) => {
+                if (addressData && addressData.length > 0) {
+                  setCepData({
+                    ...cepData,
+                    rua: data.logradouro,
+                    bairro: data.bairro,
+                    cidade: data.localidade,
+                    estado: data.uf,
+                    latitude: addressData[0].lat,
+                    longitude: addressData[0].lon,
+                  });
+                } else {
+                  console.error("Endereço não encontrado.");
+                }
+              })
+              .catch((error) => {
+                console.error("Erro ao buscar latitude e longitude:", error);
+              });
+          } else {
+            console.error("CEP não encontrado.");
+          }
+        })
+        .catch((error) => {
+          console.error("Erro ao buscar dados do endereço:", error);
+        });
+    }
+  };
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -121,18 +158,23 @@ const CadastroColetas = () => {
         <Box
           sx={{
             marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             Cadastro de Local de Coleta
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Box
+            component="form"
+            noValidate
+            onSubmit={handleSubmit}
+            sx={{ mt: 3 }}
+          >
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
@@ -320,6 +362,6 @@ const CadastroColetas = () => {
       </Container>
     </ThemeProvider>
   );
-}
+};
 
 export default CadastroColetas;
