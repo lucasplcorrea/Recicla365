@@ -74,29 +74,45 @@ const CadastroColetas = () => {
 
   // Função para lidar com a mudança do CEP
   const handleCEPChange = (event) => {
-    const cep = event.target.value.replace(/\D/g, "");
-    if (cep.length === 8) {
-      fetch(`https://viacep.com.br/ws/${cep}/json/`)
-        .then((response) => response.json())
-        .then((data) => {
-          if (!data.erro) {
-            setCepData({
-              rua: data.logradouro,
-              bairro: data.bairro,
-              cidade: data.localidade,
-              estado: data.uf,
+  const cep = event.target.value.replace(/\D/g, "");
+  if (cep.length === 8) {
+    fetch(`https://viacep.com.br/ws/${cep}/json/`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (!data.erro) {
+          const address = `${data.logradouro}, ${data.bairro}, ${data.localidade}, ${data.uf}`;
+          const encodedAddress = encodeURIComponent(address);
+          const url = `https://nominatim.openstreetmap.org/search?q=${encodedAddress}+&format=jsonv2&limit=1&addressdetails=1`;
+          fetch(url)
+            .then((response) => response.json())
+            .then((addressData) => {
+              if (addressData && addressData.length > 0) {
+                setCepData({
+                  ...cepData,
+                  rua: data.logradouro,
+                  bairro: data.bairro,
+                  cidade: data.localidade,
+                  estado: data.uf,
+                  latitude: addressData[0].lat,
+                  longitude: addressData[0].lon,
+                });
+              } else {
+                console.error('Endereço não encontrado.');
+              }
+            })
+            .catch((error) => {
+              console.error('Erro ao buscar latitude e longitude:', error);
             });
-            // Obtendo latitude e longitude após preencher os campos de endereço
-            setTimeout(getLatLongFromAddress, 3000); // Aguarda 3 segundos antes de obter latitude e longitude
-          } else {
-            console.error('CEP não encontrado.');
-          }
-        })
-        .catch((error) => {
-          console.error('Erro ao buscar dados do endereço:', error);
-        });
-    }
-  };
+        } else {
+          console.error('CEP não encontrado.');
+        }
+      })
+      .catch((error) => {
+        console.error('Erro ao buscar dados do endereço:', error);
+      });
+  }
+};
+
 
   return (
     <ThemeProvider theme={defaultTheme}>
