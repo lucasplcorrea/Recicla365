@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -15,20 +15,20 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 
 function SignInSide() {
+  const [cpf, setCpf] = useState('');
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const email = formData.get('email');
+    const cpf = formData.get('cpf').replace(/[^\d]/g, ''); // Remove caracteres não numéricos do CPF
     const password = formData.get('password');
 
     try {
-      const response = await axios.get(`http://localhost:5000/usuarios?email=${email}&password=${password}`);
+      const response = await axios.get(`http://localhost:5000/usuarios?cpf=${formatCpf(cpf)}&password=${password}`);
 
-      // Verifica se a resposta indica sucesso (código de status 200) e se há algum usuário retornado
       if (response.status === 200 && response.data.length > 0) {
         console.log('Login bem-sucedido!');
-        // Redireciona para a página de dashboard após o login
-        window.location.href = '/dashboard'; // Você pode alterar isso conforme necessário
+        window.location.href = '/dashboard'; // Redireciona para a página de dashboard após o login
       } else {
         console.error('Erro ao fazer login:', response.data);
         alert('Credenciais inválidas. Por favor, tente novamente.');
@@ -37,6 +37,19 @@ function SignInSide() {
       console.error('Erro ao fazer login:', error);
       alert('Ocorreu um erro ao fazer login. Por favor, tente novamente mais tarde.');
     }
+  };
+
+  // Função para formatar o CPF com pontos e hífens
+  const formatCpf = (value) => {
+    return value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+  };
+
+  // Função para formatar o CPF conforme o usuário digita
+  const handleCpfChange = (event) => {
+    let value = event.target.value.replace(/\D/g, ''); // Remove caracteres não numéricos do CPF
+    // Adiciona a máscara XXX.XXX.XXX-XX ao CPF
+    value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+    setCpf(value);
   };
 
   return (
@@ -78,11 +91,17 @@ function SignInSide() {
                 margin="normal"
                 required
                 fullWidth
-                id="email"
-                label="Email"
-                name="email"
-                autoComplete="email"
+                id="cpf"
+                label="CPF"
+                name="cpf"
                 autoFocus
+                value={cpf}
+                onChange={handleCpfChange}
+                inputProps={{
+                  maxLength: 14,
+                  pattern: '[0-9]*',
+                  inputMode: 'numeric',
+                }}
               />
               <TextField
                 margin="normal"
