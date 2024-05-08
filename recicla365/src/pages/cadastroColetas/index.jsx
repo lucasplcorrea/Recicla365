@@ -1,5 +1,5 @@
 import * as React from "react";
-import axios from 'axios';
+import axios from "axios";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -25,6 +25,15 @@ const CadastroColetas = () => {
     longitude: "",
   });
 
+  const [identificadorUsuario, setIdentificadorUsuario] = React.useState("");
+  React.useEffect(() => {
+    const usuarioString = localStorage.getItem("usuario");
+    if (usuarioString) {
+      const usuario = JSON.parse(usuarioString);
+      setIdentificadorUsuario(usuario.cpf);
+    }
+  }, []);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -33,22 +42,22 @@ const CadastroColetas = () => {
 
     // Verificar se pelo menos um tipo de resíduo foi selecionado
     const tiposResiduos = [
-      data.get('vidro'),
-      data.get('metal'),
-      data.get('papel'),
-      data.get('plastico'),
-      data.get('organico'),
-      data.get('baterias'),
-      data.get('polyestireno'),
+      data.get("vidro"),
+      data.get("metal"),
+      data.get("papel"),
+      data.get("plastico"),
+      data.get("organico"),
+      data.get("baterias"),
+      data.get("polyestireno"),
     ];
 
-    if (tiposResiduos.every((residuo) => residuo !== 'on')) {
-      alert('Selecione pelo menos um tipo de resíduo.');
+    if (tiposResiduos.every((residuo) => residuo !== "on")) {
+      alert("Selecione pelo menos um tipo de resíduo.");
       return;
     }
 
     // Verificar se os campos obrigatórios estão preenchidos
-    const inputs = form.querySelectorAll('input, select, textarea');
+    const inputs = form.querySelectorAll("input, select, textarea");
     let isValid = true;
 
     inputs.forEach((input) => {
@@ -64,34 +73,39 @@ const CadastroColetas = () => {
 
     // Enviar os dados para o servidor
     try {
-      const response = await axios.post('http://localhost:5000/locaisDeColeta', {
-        nome: data.get('nome'),
-        descricao: data.get('descricao'),
-        identificadorUsuario: data.get('identificadorUsuario'),
-        rua: data.get('rua'),
-        numero: data.get('numero'),
-        complemento: data.get('complemento'),
-        bairro: data.get('bairro'),
-        cidade: data.get('cidade'),
-        estado: data.get('estado'),
-        latitude: data.get('latitude'),
-        longitude: data.get('longitude'),
-        tiposResiduos: {
-          vidro: data.get('vidro') === 'on',
-          metal: data.get('metal') === 'on',
-          papel: data.get('papel') === 'on',
-          plastico: data.get('plastico') === 'on',
-          organico: data.get('organico') === 'on',
-          baterias: data.get('baterias') === 'on',
-          polyestireno: data.get('polyestireno') === 'on',
-        },
-      });
+      const response = await axios.post(
+        "http://localhost:5000/locaisDeColeta",
+        {
+          nome: data.get("nome"),
+          descricao: data.get("descricao"),
+          identificadorUsuario: data.get("identificadorUsuario"),
+          rua: data.get("rua"),
+          numero: data.get("numero"),
+          complemento: data.get("complemento"),
+          bairro: data.get("bairro"),
+          cidade: data.get("cidade"),
+          estado: data.get("estado"),
+          latitude: data.get("latitude"),
+          longitude: data.get("longitude"),
+          tiposResiduos: {
+            vidro: data.get("vidro") === "on",
+            metal: data.get("metal") === "on",
+            papel: data.get("papel") === "on",
+            plastico: data.get("plastico") === "on",
+            organico: data.get("organico") === "on",
+            baterias: data.get("baterias") === "on",
+            polyestireno: data.get("polyestireno") === "on",
+          },
+        }
+      );
 
-      console.log('Resposta do servidor:', response.data);
-      alert('Local de coleta cadastrado com sucesso!');
+      console.log("Resposta do servidor:", response.data);
+      alert("Local de coleta cadastrado com sucesso!");
     } catch (error) {
-      console.error('Erro ao cadastrar local de coleta:', error);
-      alert('Ocorreu um erro ao cadastrar o local de coleta. Por favor, tente novamente.');
+      console.error("Erro ao cadastrar local de coleta:", error);
+      alert(
+        "Ocorreu um erro ao cadastrar o local de coleta. Por favor, tente novamente."
+      );
     }
   };
 
@@ -161,7 +175,6 @@ const CadastroColetas = () => {
     }
   };
 
-  
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="md">
@@ -214,6 +227,8 @@ const CadastroColetas = () => {
                   id="identificadorUsuario"
                   label="Identificador do Usuário"
                   name="identificadorUsuario"
+                  value={identificadorUsuario}
+                  readOnly
                 />
               </Grid>
               <Grid item xs={12} lg={6}>

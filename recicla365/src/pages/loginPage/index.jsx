@@ -28,6 +28,7 @@ function SignInSide() {
 
       if (response.status === 200 && response.data.length > 0) {
         console.log('Login bem-sucedido!');
+        localStorage.setItem('usuario', JSON.stringify(response.data[0]));
         window.location.href = '/dashboard'; // Redireciona para a página de dashboard após o login
       } else {
         console.error('Erro ao fazer login:', response.data);
