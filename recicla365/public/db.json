@@ -163,5 +163,29 @@
       "id": 10
     }
   ],
-  "locaisDeColeta": []
+  "locaisDeColeta": [
+    {
+      "nome": "Local de Coleta 1",
+      "descricao": "Esse é o primeiro local de coleta, e aceita todos os tipos de resíduos",
+      "identificadorUsuario": "10180874942",
+      "rua": "Rua Olavo Bilac",
+      "numero": "116",
+      "complemento": "",
+      "bairro": "Canto",
+      "cidade": "Florianópolis",
+      "estado": "SC",
+      "latitude": "-27.5851666",
+      "longitude": "-48.5846367",
+      "tiposResiduos": {
+        "vidro": true,
+        "metal": true,
+        "papel": true,
+        "plastico": true,
+        "organico": true,
+        "baterias": true,
+        "polyestireno": true
+      },
+      "id": 1
+    }
+  ]
 }

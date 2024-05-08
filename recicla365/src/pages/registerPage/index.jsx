@@ -333,7 +333,7 @@ function SignUp() {
                     label="CEP"
                     name="cep"
                     autoComplete="cep"
-                    inputProps={{ maxLength: 9 }}
+                    inputProps={{minLength: 9, maxLength: 9 }}
                     onChange={(e) => {
                       const value = e.target.value.replace(/\D/g, "");
                       e.target.value = value.replace(/^(\d{5})(\d)/, "$1-$2");
