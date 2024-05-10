@@ -20,6 +20,8 @@ import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import FormHelperText from "@mui/material/FormHelperText";
 import FormControl from "@mui/material/FormControl";
+import DrawerAppBar from "../../components/externalHeader";
+import LabelBottomNavigation from "../../components/footer";
 
 function SignUp() {
   // State para armazenar os dados do CEP
@@ -218,6 +220,7 @@ function SignUp() {
   //BLOCOS DO FORMULÁRIO
   return (
     <ThemeProvider theme={createTheme()}>
+      <DrawerAppBar />
       <LocalizationProvider
         dateAdapter={AdapterDayjs}
         adapterLocale="pt-br"
@@ -492,6 +495,7 @@ function SignUp() {
           </Box>
         </Container>
       </LocalizationProvider>
+      <LabelBottomNavigation />
     </ThemeProvider>
   );
 }
