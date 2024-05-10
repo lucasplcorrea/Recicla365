@@ -31,28 +31,22 @@ const CadastroColetas = () => {
     try {
       // Recupera os dados dos usuários do localStorage
       const usuariosString = localStorage.getItem("user");
-      console.log("Dados dos usuários:", usuariosString);
-  
+      
       // Verifica se os dados dos usuários existem
       if (usuariosString) {
-        console.log("Dados dos usuários encontrados.");
-  
+        
         // Converte a string JSON para um objeto
         const usuariosData = JSON.parse(usuariosString);
-        console.log("Dados dos usuários convertidos:", usuariosData);
   
         // Extrai o CPF do objeto de usuário
         const cpf = usuariosData.cpf;
-        console.log("CPF do usuário:", cpf);
   
         // Retorna o CPF recuperado
         return cpf;
       } else {
-        console.log("Dados dos usuários não encontrados.");
         return null;
       }
     } catch (error) {
-      console.error("Erro ao obter identificador de usuário:", error);
       return null;
     }
   };
