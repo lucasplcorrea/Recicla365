@@ -1,56 +1,32 @@
-import React from 'react';
-import styled from 'styled-components';
+import * as React from 'react';
+import Header from '../../components/header/index.jsx';
+import Grid from '@mui/material/Grid';
+import CardLocais from '../../components/cards/CardLocais.jsx';
+import CardUsuarios from '../../components/cards/CardUsuarios.jsx';
+import CardUltimoLocal from '../../components/cards/CardUltimoLocal.jsx';
+import CardContadorLocais from '../../components/cards/CardResiduos.jsx';
 
-const Container = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-`;
 
-const Content = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-`;
-
-const Header = styled.div`
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 20px;
-`;
-
-const Sidebar = styled.div`
-  font-size: 18px;
-  margin-bottom: 20px;
-`;
-
-const MainContent = styled.div`
-  font-size: 18px;
-  margin-bottom: 20px;
-`;
-
-const Footer = styled.div`
-  font-size: 14px;
-`;
-
-const Dashboard = () => {
+export default function Dashboard() {
+  
   return (
-    <Container>
-      <Content>
-        <Header>Header</Header>
-        <div style={{ display: 'flex' }}>
-          <Sidebar>Sidebar</Sidebar>
-          <MainContent>Main Content</MainContent>
-        </div>
-        <Footer>Footer</Footer>
-      </Content>
-    </Container>
+    <div>
+      <Header />
+
+      <Grid container spacing={4}>
+        <Grid item xs={12} sm={6} md={4}>
+          <CardUsuarios />
+        </Grid>
+        <Grid item xs={12} sm={6} md={4}>
+          <CardLocais />
+        </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <CardUltimoLocal />
+          </Grid>
+          <Grid item xs={12} sm={12} md={12}>
+          <CardContadorLocais />
+          </Grid>
+      </Grid>
+    </div>
   );
 }
-
-export default Dashboard;

@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -12,6 +13,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import HeaderWithProfileMenu from "../../components/header";
 
 const defaultTheme = createTheme();
 
@@ -25,14 +27,41 @@ const CadastroColetas = () => {
     longitude: "",
   });
 
-  const [identificadorUsuario, setIdentificadorUsuario] = React.useState("");
-  React.useEffect(() => {
-    const usuarioString = localStorage.getItem("usuario");
-    if (usuarioString) {
-      const usuario = JSON.parse(usuarioString);
-      setIdentificadorUsuario(usuario.cpf);
+  const obterIdentificadorUsuario = async () => {
+    try {
+      // Recupera os dados dos usuários do localStorage
+      const usuariosString = localStorage.getItem("user");
+      
+      // Verifica se os dados dos usuários existem
+      if (usuariosString) {
+        
+        // Converte a string JSON para um objeto
+        const usuariosData = JSON.parse(usuariosString);
+  
+        // Extrai o CPF do objeto de usuário
+        const cpf = usuariosData.cpf;
+  
+        // Retorna o CPF recuperado
+        return cpf;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      return null;
     }
+  };
+  
+  const [identificadorUsuario, setIdentificadorUsuario] = React.useState("");
+  
+  React.useEffect(() => {
+    // Obtém o identificador de usuário do localStorage
+    obterIdentificadorUsuario().then((cpf) => {
+      if (cpf !== null) {
+        setIdentificadorUsuario(cpf);
+      }
+    });
   }, []);
+  
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -177,6 +206,7 @@ const CadastroColetas = () => {
 
   return (
     <ThemeProvider theme={defaultTheme}>
+      <HeaderWithProfileMenu />
       <Container component="main" maxWidth="md">
         <CssBaseline />
         <Box
@@ -228,7 +258,6 @@ const CadastroColetas = () => {
                   label="Identificador do Usuário"
                   name="identificadorUsuario"
                   value={identificadorUsuario}
-                  readOnly
                 />
               </Grid>
               <Grid item xs={12} lg={6}>
