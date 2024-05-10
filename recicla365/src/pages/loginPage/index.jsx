@@ -28,7 +28,9 @@ function SignInSide() {
 
       if (response.status === 200 && response.data.length > 0) {
         console.log('Login bem-sucedido!');
-        window.location.href = '/dashboard'; // Redireciona para a página de dashboard após o login
+        const userData = response.data[0]; // Assumindo que data[0] contém informações do usuário
+        localStorage.setItem('user', JSON.stringify(userData));
+        window.location.href = '/dashboard';
       } else {
         console.error('Erro ao fazer login:', response.data);
         alert('Credenciais inválidas. Por favor, tente novamente.');
