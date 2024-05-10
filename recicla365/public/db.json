@@ -167,7 +167,8 @@
     {
       "nome": "Local de Coleta 1",
       "descricao": "Esse é o primeiro local de coleta, e aceita todos os tipos de resíduos",
-      "identificadorUsuario": "10180874942",
+      "identificadorUsuario": "987.654.321-00",
+      "nomeUsuario:": "Usuário 2",
       "rua": "Rua Olavo Bilac",
       "numero": "116",
       "complemento": "",
