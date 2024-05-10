@@ -61,6 +61,11 @@ export default function HeaderWithProfileMenu() {
     setAnchorEl(null);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('user'); // Limpa os dados do usuário do localStorage
+   window.location.href = '/login'; // Redireciona para a página de login
+  }
+
   return (
     <React.Fragment>
       <Box sx={{ flexGrow: 1 }}>
@@ -152,17 +157,17 @@ export default function HeaderWithProfileMenu() {
           <Avatar /> Olá, {username}
         </MenuItem>
         <Divider />
-        <MenuItem onClick={handleClose}>
+        <MenuItem component={Link} to="/cadastro-coletas" onClick={handleClose}>
           <ListItemIcon>
             <RecyclingIcon fontSize="small" />
           </ListItemIcon>
           Cadastrar Novo Ponto
         </MenuItem>
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={handleLogout}>
           <ListItemIcon>
-            <LogoutIcon fontSize="small" />
+            <LogoutIcon fontSize="small" style={{ color: 'red' }} />
           </ListItemIcon>
-          Logout
+          <Typography style={{ color: 'red' }}>Logout</Typography>
         </MenuItem>
       </Menu>
       <Drawer
