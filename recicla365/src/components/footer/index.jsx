@@ -37,7 +37,7 @@ export default function LabelBottomNavigation() {
       <Divider />
       <div style={{ display: "flex", justifyContent: "center" }}>
         <BottomNavigation
-          sx={{ width: 500 }}
+          sx={{ width: '100%', justifyContent: 'center' }}
           value={value}
           onChange={(event, newValue) => {
             setValue(newValue);

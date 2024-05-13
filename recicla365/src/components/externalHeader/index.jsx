@@ -79,7 +79,7 @@ function DrawerAppBar(props) {
             ))}
           </Box>
         </Toolbar>
-      </AppBar>
+      </AppBar> {/* Adicione a tag de fechamento correspondente */}
       <nav>
         <Drawer
           container={container}
@@ -97,9 +97,6 @@ function DrawerAppBar(props) {
           {drawer}
         </Drawer>
       </nav>
-      <Box component="main" sx={{ p: 3 }}>
-        <Toolbar />
-      </Box>
     </Box>
   );
 }
