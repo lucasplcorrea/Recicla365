@@ -168,7 +168,7 @@
       "nome": "Local de Coleta 1",
       "descricao": "Esse é o primeiro local de coleta, e aceita todos os tipos de resíduos",
       "identificadorUsuario": "987.654.321-00",
-      "nomeUsuario:": "Usuário 2",
+      "nomeUsuario": "Usuário 2",
       "rua": "Rua Olavo Bilac",
       "numero": "116",
       "complemento": "",
@@ -187,6 +187,30 @@
         "polyestireno": true
       },
       "id": 1
+    },
+    {
+      "nome": "Local de Coleta 2",
+      "descricao": "Esse é o segundo local de coleta e não aceita todos os materiais",
+      "identificadorUsuario": "987.654.321-00",
+      "nomeUsuario": "Usuário 2",
+      "rua": "Rua Olavo Bilac",
+      "numero": "116",
+      "complemento": "",
+      "bairro": "Canto",
+      "cidade": "Florianópolis",
+      "estado": "SC",
+      "latitude": "-27.5851666",
+      "longitude": "-48.5846367",
+      "tiposResiduos": {
+        "vidro": false,
+        "metal": true,
+        "papel": true,
+        "plastico": false,
+        "organico": true,
+        "baterias": true,
+        "polyestireno": false
+      },
+      "id": 2
     }
   ]
 }
