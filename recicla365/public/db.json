@@ -181,7 +181,7 @@
         "vidro": true,
         "metal": true,
         "papel": true,
-        "plastico": true,
+        "plastico": false,
         "organico": true,
         "baterias": true,
         "polyestireno": true
