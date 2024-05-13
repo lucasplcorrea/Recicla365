@@ -14,6 +14,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import HeaderWithProfileMenu from "../../components/header";
+import LabelBottomNavigation from "../../components/footer";
 
 const defaultTheme = createTheme();
 
@@ -31,18 +32,18 @@ const CadastroColetas = () => {
     try {
       // Recupera os dados dos usuários do localStorage
       const usuariosString = localStorage.getItem("user");
-      
+  
       // Verifica se os dados dos usuários existem
       if (usuariosString) {
-        
         // Converte a string JSON para um objeto
         const usuariosData = JSON.parse(usuariosString);
   
-        // Extrai o CPF do objeto de usuário
+        // Extrai o CPF e o nome do objeto de usuário
         const cpf = usuariosData.cpf;
+        const nomeUsuario = usuariosData.nome;
   
-        // Retorna o CPF recuperado
-        return cpf;
+        // Retorna o CPF e o nome do usuário recuperados
+        return { cpf, nomeUsuario };
       } else {
         return null;
       }
@@ -52,12 +53,14 @@ const CadastroColetas = () => {
   };
   
   const [identificadorUsuario, setIdentificadorUsuario] = React.useState("");
+  const [nomeUsuario, setNomeUsuario] = React.useState("");
   
   React.useEffect(() => {
     // Obtém o identificador de usuário do localStorage
-    obterIdentificadorUsuario().then((cpf) => {
-      if (cpf !== null) {
-        setIdentificadorUsuario(cpf);
+    obterIdentificadorUsuario().then((dadosUsuario) => {
+      if (dadosUsuario !== null) {
+        setIdentificadorUsuario(dadosUsuario.cpf);
+        setNomeUsuario(dadosUsuario.nomeUsuario); 
       }
     });
   }, []);
@@ -108,6 +111,7 @@ const CadastroColetas = () => {
           nome: data.get("nome"),
           descricao: data.get("descricao"),
           identificadorUsuario: data.get("identificadorUsuario"),
+          nomeUsuario: nomeUsuario,
           rua: data.get("rua"),
           numero: data.get("numero"),
           complemento: data.get("complemento"),
@@ -415,6 +419,7 @@ const CadastroColetas = () => {
           </Box>
         </Box>
       </Container>
+      <LabelBottomNavigation />
     </ThemeProvider>
   );
 };
