@@ -13,6 +13,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
+import DrawerAppBar from '../../components/externalHeader/index.jsx';
+import LabelBottomNavigation from '../../components/footer/index.jsx';
 
 function SignInSide() {
   const [cpf, setCpf] = useState('');
@@ -56,6 +58,7 @@ function SignInSide() {
 
   return (
     <ThemeProvider theme={createTheme()}>
+      <DrawerAppBar />
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
         <Grid
@@ -129,6 +132,7 @@ function SignInSide() {
           </Box>
         </Grid>
       </Grid>
+      <LabelBottomNavigation />
     </ThemeProvider>
   );
 }

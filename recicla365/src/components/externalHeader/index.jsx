@@ -14,6 +14,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import { Link } from 'react-router-dom'; // Importando Link do React Router
 
 const drawerWidth = 240;
 const navItems = ['Home', 'Cadastro', 'Pontos de Coleta', 'Login'];
@@ -36,7 +37,10 @@ function DrawerAppBar(props) {
         {navItems.map((item) => (
           <ListItem key={item} disablePadding>
             <ListItemButton sx={{ textAlign: 'center' }}>
-              <ListItemText primary={item} />
+              {/* Usando o Link do React Router para criar os links */}
+              <Link to={item === 'Home' ? '/' : item === 'Pontos de Coleta' ? '/locais-de-coleta' : `/${item.toLowerCase()}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                <ListItemText primary={item} />
+              </Link>
             </ListItemButton>
           </ListItem>
         ))}
@@ -69,13 +73,13 @@ function DrawerAppBar(props) {
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {navItems.map((item) => (
-              <Button key={item} sx={{ color: '#fff' }}>
+              <Button key={item} component={Link} to={item === 'Home' ? '/' : item === 'Pontos de Coleta' ? '/locais-de-coleta' : `/${item.toLowerCase()}`} sx={{ color: '#fff', textDecoration: 'none' }}>
                 {item}
               </Button>
             ))}
           </Box>
         </Toolbar>
-      </AppBar>
+      </AppBar> {/* Adicione a tag de fechamento correspondente */}
       <nav>
         <Drawer
           container={container}
@@ -93,19 +97,8 @@ function DrawerAppBar(props) {
           {drawer}
         </Drawer>
       </nav>
-      <Box component="main" sx={{ p: 3 }}>
-        <Toolbar />
-      </Box>
     </Box>
   );
 }
-
-DrawerAppBar.propTypes = {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
-  window: PropTypes.func,
-};
 
 export default DrawerAppBar;
