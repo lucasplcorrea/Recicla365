@@ -9,23 +9,7 @@ import IconButton from '@mui/joy/IconButton';
 import Link from '@mui/joy/Link';
 import RecyclingIcon from '@mui/icons-material/Recycling';
 
-export default function MultipleInteractionCard() {
-  const [locaisDeColeta, setLocaisDeColeta] = React.useState([]);
-
-  React.useEffect(() => {
-    const fetchLocaisDeColeta = async () => {
-      try {
-        const response = await fetch('http://localhost:5000/locaisDeColeta');
-        const data = await response.json();
-        setLocaisDeColeta(data);
-      } catch (error) {
-        console.error('Erro ao buscar os locais de coleta:', error);
-      }
-    };
-
-    fetchLocaisDeColeta();
-  }, []);
-
+export default function ExternalLocaisDeColeta({ local }) {
   const renderIconButtons = (tiposResiduos) => {
     if (!tiposResiduos) return null;
 
@@ -69,48 +53,40 @@ export default function MultipleInteractionCard() {
     return `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
   };
 
-  const renderCards = () => {
-    return locaisDeColeta.map((localDeColeta, index) => (
-      <Card key={index} variant="outlined" sx={{ width: 320, mb: 2 }}>
-        <CardOverflow>
-          <AspectRatio ratio="2">
-            <img
-              src="https://img.freepik.com/free-photo/recycle-sign-grass_23-2148576658.jpg?t=st=1715565955~exp=1715569555~hmac=1926104080632defe69bcb3922bb22fd19826f0079d944943ae6870f23483d60&w=740"
-              srcSet="https://img.freepik.com/free-photo/recycle-sign-grass_23-2148576658.jpg?t=st=1715565955~exp=1715569555~hmac=1926104080632defe69bcb3922bb22fd19826f0079d944943ae6870f23483d60&w=740 2x"
-              loading="lazy"
-            />
-          </AspectRatio>
-          {renderIconButtons(localDeColeta.tiposResiduos)}
-        </CardOverflow>
-        <CardContent>
-          <Typography level="title-md">
-            <Link href={getGoogleMapsUrl(localDeColeta.latitude, localDeColeta.longitude)} underline="none" target="_blank" rel="noopener noreferrer">
-              {localDeColeta.nome}
-            </Link>
+  return (
+    <Card variant="outlined" sx={{ margin: { xs: '20px', md: 'auto' }, mb: 2 }}>
+      <CardOverflow>
+        <AspectRatio ratio="2">
+          <img
+            src="https://img.freepik.com/free-photo/recycle-sign-grass_23-2148576658.jpg?t=st=1715565955~exp=1715569555~hmac=1926104080632defe69bcb3922bb22fd19826f0079d944943ae6870f23483d60&w=740"
+            srcSet="https://img.freepik.com/free-photo/recycle-sign-grass_23-2148576658.jpg?t=st=1715565955~exp=1715569555~hmac=1926104080632defe69bcb3922bb22fd19826f0079d944943ae6870f23483d60&w=740 2x"
+            loading="lazy"
+          />
+        </AspectRatio>
+        {renderIconButtons(local.tiposResiduos)}
+      </CardOverflow>
+      <CardContent>
+        <Typography level="title-md">
+          <Link href={getGoogleMapsUrl(local.latitude, local.longitude)} underline="none" target="_blank" rel="noopener noreferrer">
+            {local.nome}
+          </Link>
+        </Typography>
+        <Typography level="body-sm">
+          {local.descricao}
+        </Typography>
+      </CardContent>
+      <CardOverflow variant="soft">
+        <Divider inset="context" />
+        <CardContent orientation="horizontal">
+          <Typography level="body-xs">
+            Cadastrado por: {local.nomeUsuario}
           </Typography>
-          <Typography level="body-sm">
-            {localDeColeta.descricao}
+          <Divider orientation="vertical" />
+          <Typography level="body-xs">
+            {`${local.rua}, ${local.numero}, ${local.bairro}, ${local.cidade}, ${local.estado}`}
           </Typography>
         </CardContent>
-        <CardOverflow variant="soft">
-          <Divider inset="context" />
-          <CardContent orientation="horizontal">
-            <Typography level="body-xs">
-              Cadastrado por: {localDeColeta.nomeUsuario}
-            </Typography>
-            <Divider orientation="vertical" />
-            <Typography level="body-xs">
-              {`${localDeColeta.rua}, ${localDeColeta.numero}, ${localDeColeta.bairro}, ${localDeColeta.cidade}, ${localDeColeta.estado}`}
-            </Typography>
-          </CardContent>
-        </CardOverflow>
-      </Card>
-    ));
-  };
-
-  return (
-    <div>
-      {renderCards()}
-    </div>
+      </CardOverflow>
+    </Card>
   );
 }
