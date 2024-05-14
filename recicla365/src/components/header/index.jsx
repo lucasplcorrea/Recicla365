@@ -23,7 +23,7 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import AddLocationAltIcon from '@mui/icons-material/AddLocationAlt';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
-import { Link } from 'react-router-dom'; // Importe o Link do react-router-dom
+import { Link } from 'react-router-dom';
 
 export default function HeaderWithProfileMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);

@@ -165,7 +165,7 @@
   ],
   "locaisDeColeta": [
     {
-      "nome": "Local de Coleta 1",
+      "nome": "Local de Coleta Um",
       "descricao": "Esse é o primeiro local de coleta, e aceita todos os tipos de resíduos",
       "identificadorUsuario": "987.654.321-00",
       "nomeUsuario": "Usuário 2",
@@ -181,7 +181,7 @@
         "vidro": true,
         "metal": true,
         "papel": true,
-        "plastico": true,
+        "plastico": false,
         "organico": true,
         "baterias": true,
         "polyestireno": true
@@ -211,7 +211,8 @@
         "polyestireno": false
       },
       "id": 2
-    },{
+    },
+    {
       "nome": "Local de Coleta 3",
       "descricao": "Esse é o terceiro local de coleta, aceita diversos tipos de resíduos.",
       "identificadorUsuario": "123.456.789-00",
@@ -354,6 +355,54 @@
         "polyestireno": true
       },
       "id": 8
+    },
+    {
+      "nome": "Novo Local de Teste",
+      "descricao": "Esse é um local de teste para um teste de funcionalidade",
+      "identificadorUsuario": "123.456.789-00",
+      "nomeUsuario": "Usuário 1",
+      "rua": "Rua Vinte e Cinco de Dezembro",
+      "numero": "40",
+      "complemento": "",
+      "bairro": "Paranaguamirim",
+      "cidade": "Joinville",
+      "estado": "SC",
+      "latitude": "-26.3478146",
+      "longitude": "-48.7942284",
+      "tiposResiduos": {
+        "vidro": false,
+        "metal": true,
+        "papel": false,
+        "plastico": false,
+        "organico": false,
+        "baterias": false,
+        "polyestireno": false
+      },
+      "id": 9
+    },
+    {
+      "nome": "Novo Local de Teste",
+      "descricao": "Apenas um local a mais",
+      "identificadorUsuario": "123.456.789-00",
+      "nomeUsuario": "Usuário 1",
+      "rua": "Rua Universidade",
+      "numero": "S/N",
+      "complemento": "",
+      "bairro": "Boehmerwald",
+      "cidade": "Joinville",
+      "estado": "SC",
+      "latitude": "-26.3679057",
+      "longitude": "-48.8228335",
+      "tiposResiduos": {
+        "vidro": false,
+        "metal": true,
+        "papel": false,
+        "plastico": true,
+        "organico": false,
+        "baterias": false,
+        "polyestireno": false
+      },
+      "id": 10
     }
   ]
 }

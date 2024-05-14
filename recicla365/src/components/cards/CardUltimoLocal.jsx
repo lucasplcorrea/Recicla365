@@ -4,6 +4,7 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { Button, CardActionArea, CardActions } from "@mui/material";
+import { Link } from "react-router-dom";
 import mapsImage from "../../../public/img/vectors/point.svg";
 
 const cardStyle = {
@@ -57,7 +58,7 @@ export default function CardUltimoLocal() {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="primary">
+        <Button size="small" color="primary" component={Link} to="/pontos-cadastrados">
           Locais
         </Button>
       </CardActions>
