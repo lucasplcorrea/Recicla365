@@ -18,7 +18,7 @@
 - **ContextAPI:** 🔒 Gerencia o controle de acesso de usuários autenticados, garantindo a segurança das informações.
 - **Integração com APIs:** 🌐 Utilização do viaCEP para obtenção automática de endereços e do nominatim (API OpenStreet Maps) para obtenção automática de coordenadas geográficas.
 - **Responsividade:** 📱 Implementada com Material UI e Joy UI, garantindo uma experiência consistente em diferentes dispositivos.
-- **Integração com Google Maps:** 🗺️ Ao visualizar o local de coleta, é possível acessar diretamente o Google Maps com a localização cadastrada (@profBruno o mapa com Leaflet não deu, mas isso aqui ficou muito bom também).
+- **Integração com Google Maps:** 🗺️ Ao visualizar o local de coleta, é possível acessar diretamente o Google Maps com a localização cadastrada (**@profBruno** o mapa com Leaflet não deu, mas isso aqui ficou muito bom também).
 - **Modal de Confirmação:** ❓ Implementado para alteração e exclusão de informações, com confirmação do usuário antes da ação ser efetivada.
 - **Página de Login Dinâmica:** 🎨 Utiliza wallpapers dinâmicos obtidos via API Unsplash Images, proporcionando uma experiência visual agradável.
 
