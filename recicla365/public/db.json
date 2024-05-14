@@ -379,6 +379,30 @@
         "polyestireno": false
       },
       "id": 9
+    },
+    {
+      "nome": "Novo Local de Teste",
+      "descricao": "Apenas um local a mais",
+      "identificadorUsuario": "123.456.789-00",
+      "nomeUsuario": "Usuário 1",
+      "rua": "Rua Universidade",
+      "numero": "S/N",
+      "complemento": "",
+      "bairro": "Boehmerwald",
+      "cidade": "Joinville",
+      "estado": "SC",
+      "latitude": "-26.3679057",
+      "longitude": "-48.8228335",
+      "tiposResiduos": {
+        "vidro": false,
+        "metal": true,
+        "papel": false,
+        "plastico": true,
+        "organico": false,
+        "baterias": false,
+        "polyestireno": false
+      },
+      "id": 10
     }
   ]
 }
