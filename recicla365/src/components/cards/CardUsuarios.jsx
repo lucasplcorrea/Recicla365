@@ -4,6 +4,7 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { Button, CardActionArea, CardActions } from "@mui/material";
+import { Link } from "react-router-dom";
 import userImage from "../../../public/img/vectors/users.svg";
 
 const cardStyle = {
@@ -54,7 +55,7 @@ export default function CardUsuarios() {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="primary">
+        <Button size="small" color="primary" component={Link} to="/usuarios-cadastrados">
           Usuários
         </Button>
       </CardActions>
